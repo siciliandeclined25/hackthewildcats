@@ -18,6 +18,7 @@ class Grass(Entity):
             collider="mesh",
             color=Vec4(0.31, 0.47, 0.24, 1),
         )
+        self.killMe = False
 
     def update(self):
         pass

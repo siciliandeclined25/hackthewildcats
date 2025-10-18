@@ -14,6 +14,7 @@ class Bobcat(Entity):
         self.modes = ["idle", "walk", "hunt", "death", "babyidle", "babymake"]
         self.idleTimer = random.randint(0, 4)
         self.mode = self.modes[0]
+        self.killMe = False
 
     def update(self):
         pass

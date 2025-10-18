@@ -14,6 +14,7 @@ class Sun(Entity):
         self.radius = 20
         self.angle = 0  # 1 = increasing, -1 = decreasing
         self.speed = 0.1  # degrees per second
+        self.killMe = False
 
     def update(self):
         # move in a vertical circular path

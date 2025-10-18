@@ -10,6 +10,7 @@ class Arbore(Entity):
             color=Vec4(0.13, 0.25, 0.13, 1),
         )
         self.placeRandom()
+        self.killMe = False
 
     def placeRandom(self):
         range = 20

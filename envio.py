@@ -1,4 +1,7 @@
 # imports
+from enum import EnumType
+from re import A
+from typing import ParamSpecArgs
 from creatures import bobcat, rabbit, sun, arbore, grass
 import random
 
@@ -6,13 +9,32 @@ import random
 class Manhattan:
     """a small class that represents life inside of the konza prarie"""
 
-    def __init__(self, worldChunkSize=50, kSelected=30, rSelected=2, forestCount=30):
+    def __init__(self, worldChunkSize=50, kSelected=2, rSelected=30, forestCount=30):
         self.myEntities = []
         self.kSelectedCount = kSelected
         self.rSelectedCount = rSelected
         self.forestCount = forestCount
         self.worldChunkSize = worldChunkSize
         self.createWorld()
+        # metadata clicked handler
+
+    def clearClicked(self):
+        for entity in self.myEntities:
+            try:
+                entity.clicked = False
+            except AttributeError:
+                pass
+
+    def getClickedEntity(self, previousMetadata):
+        for entity in self.myEntities:
+            try:
+                if entity.clicked == True:
+                    print("got my eyes open")
+                    return entity.metadata
+            except AttributeError:
+                pass
+        nonemeta = False
+        return nonemeta
 
     def createWorld(self):
         """creates and populates a simulated world and enviornment at the konza prarie"""
@@ -29,5 +51,16 @@ class Manhattan:
         self.myEntities.append(sun.Sun())
 
     def updateCreatures(self):
+        # update entity positions
         for entity in self.myEntities:
             entity.update()
+            if entity.killMe:
+                self.myEntities.remove(entity)
+                print(entity.metadata["name"] + " just died. RIP 🥀")
+            # there's a lot of tries because i don't want to make a parent class
+            # and have these attriibutes pass
+            try:
+                if entity.clicked == True:
+                    pass
+            except AttributeError:
+                pass
