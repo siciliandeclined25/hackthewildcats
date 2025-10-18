@@ -2,17 +2,27 @@
 # HACK K-STATE #
 ################
 # MODULES
-from enum import EnumType
-from multiprocessing import Pool
 from ursina import *
 from ursina.prefabs.editor_camera import EditorCamera
+from panda3d.core import WindowProperties
+from panda3d.core import loadPrcFileData
+
+from time import sleep
 
 # LOCAL MODULES
 import envio
 
+loadPrcFileData("", "sync-video false")  # disables v-sync pause
+loadPrcFileData("", "want-pstats false")  # optional
+loadPrcFileData("", "window-type onscreen")  # ensures visible window
+loadPrcFileData("", "background-yield 0")  # keeps rendering in background
+
 # VARIABLES
 # defines the camera and app scope
 app = Ursina()
+
+# window.fullscreen = True
+# window.borderless = True
 ec = EditorCamera()
 ec.y = 10
 ec.z = 10
@@ -49,16 +59,27 @@ ageCounter = Text(
     position=(0.01, 0.014),
 )
 
+app = Ursina()
+
+
+def input(key):
+    if key == "space":
+        print("clicked!")
+        envio.paused = not envio.paused
+    if key == "left mouse down":
+        envio.clearClicked()
+
 
 # MAIN LOOP
 previousMetadata = None
+globalTimeInDays = 0
 while True:
     # first clear all clicked
-    envio.clearClicked()
-    envio.updateCreatures()
-    potentialNewMetadata = envio.getClickedEntity(previousMetadata)
-    if previousMetadata != potentialNewMetadata and potentialNewMetadata != False:
-        previousMetadata = potentialNewMetadata
-        nameCounter.text = f"Name: {potentialNewMetadata['name']}"
-        ageCounter.text = f"Age: {potentialNewMetadata['age']}"
+    if envio.paused == False:
+        clickedMetadata = envio.updateCreatures()
+        if clickedMetadata != None:
+            nameCounter.text = "Name: " + clickedMetadata["name"]
+            ageCounter.text = "Age: " + str(clickedMetadata["age"])
+        globalTimeInDays += 42 * time.dt
+        yearCounter.text = "Year: " + str(globalTimeInDays // 365)
     app.step()

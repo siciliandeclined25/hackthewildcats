@@ -18,5 +18,5 @@ class Arbore(Entity):
             random.randint(-1 * range, range), 0, random.randint(-1 * range, range)
         )
 
-    def update(self):
+    def mupdate(self):
         pass

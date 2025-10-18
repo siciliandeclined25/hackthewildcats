@@ -16,5 +16,5 @@ class Bobcat(Entity):
         self.mode = self.modes[0]
         self.killMe = False
 
-    def update(self):
+    def mupdate(self):
         pass

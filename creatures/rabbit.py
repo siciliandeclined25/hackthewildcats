@@ -24,6 +24,7 @@ class Rabbit(Entity):
         # entity metadata for our little explorer
         self.metadata = {
             "name": names.get_first_name(),
+            "lastname": names.get_last_name(),
             "type": "Rabbit",
             "age": 0,
             "offspring": 0,
@@ -31,9 +32,14 @@ class Rabbit(Entity):
         self.directionToWalk = Vec3(random.choice([-1, 1]), 0, random.choice([-1, 1]))
         # kill me, kills the entity in a game loop
         self.killMe = False
+        self.lifeExpectancy = random.randint(1000, 2555)
 
-    def update(self):
+    def mupdate(self):
         # handle if we're not clicked
+        # get older
+        self.metadata["age"] += 42 * time.dt
+        if self.metadata["age"] > self.lifeExpectancy:  # die when old
+            self.killMe = True
         if not self.clicked:
             self.color = color.white
         if self.mode == "idle":

@@ -20,5 +20,5 @@ class Grass(Entity):
         )
         self.killMe = False
 
-    def update(self):
+    def mupdate(self):
         pass

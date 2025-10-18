@@ -16,7 +16,7 @@ class Sun(Entity):
         self.speed = 0.1  # degrees per second
         self.killMe = False
 
-    def update(self):
+    def mupdate(self):
         # move in a vertical circular path
         self.angle += self.speed * time.dt
 

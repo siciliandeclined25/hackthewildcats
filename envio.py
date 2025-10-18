@@ -16,6 +16,7 @@ class Manhattan:
         self.forestCount = forestCount
         self.worldChunkSize = worldChunkSize
         self.createWorld()
+        self.paused = False
         # metadata clicked handler
 
     def clearClicked(self):
@@ -51,9 +52,10 @@ class Manhattan:
         self.myEntities.append(sun.Sun())
 
     def updateCreatures(self):
+        clickedMetadata = None
         # update entity positions
         for entity in self.myEntities:
-            entity.update()
+            entity.mupdate()
             if entity.killMe:
                 self.myEntities.remove(entity)
                 print(entity.metadata["name"] + " just died. RIP 🥀")
@@ -61,6 +63,8 @@ class Manhattan:
             # and have these attriibutes pass
             try:
                 if entity.clicked == True:
-                    pass
+                    print("look ma!")
+                    clickedMetadata = entity.metadata
             except AttributeError:
                 pass
+        return clickedMetadata
