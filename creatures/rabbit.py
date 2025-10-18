@@ -33,6 +33,9 @@ class Rabbit(Entity):
         # kill me, kills the entity in a game loop
         self.killMe = False
         self.lifeExpectancy = random.randint(1000, 2555)
+        # sets a timer until pregnancy
+        self.pregnancyTimer = random.randint(500, 1000)
+        self.makeOffspring = False
 
     def mupdate(self):
         # handle if we're not clicked
@@ -40,6 +43,10 @@ class Rabbit(Entity):
         self.metadata["age"] += 42 * time.dt
         if self.metadata["age"] > self.lifeExpectancy:  # die when old
             self.killMe = True
+        if self.metadata["age"] > self.pregnancyTimer:
+            self.metadata["offspring"] += 1
+            self.pregnancyTimer += random.randint(1000, 2000)
+            self.makeOffspring = True
         if not self.clicked:
             self.color = color.white
         if self.mode == "idle":

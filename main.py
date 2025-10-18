@@ -6,7 +6,7 @@ from ursina import *
 from ursina.prefabs.editor_camera import EditorCamera
 from panda3d.core import WindowProperties
 from panda3d.core import loadPrcFileData
-
+from creatures import bobcat
 from time import sleep
 
 # LOCAL MODULES
@@ -66,6 +66,8 @@ def input(key):
     if key == "space":
         print("clicked!")
         envio.paused = not envio.paused
+    if key == "p":
+        envio.myEntites.append(bobcat.Bobcat())
     if key == "left mouse down":
         envio.clearClicked()
 
@@ -78,8 +80,10 @@ while True:
     if envio.paused == False:
         clickedMetadata = envio.updateCreatures()
         if clickedMetadata != None:
-            nameCounter.text = "Name: " + clickedMetadata["name"]
-            ageCounter.text = "Age: " + str(clickedMetadata["age"])
+            nameCounter.text = (
+                "Name: " + clickedMetadata["name"] + " " + clickedMetadata["lastname"]
+            )
+            ageCounter.text = "Age: " + str(clickedMetadata["age"] // 365)
         globalTimeInDays += 42 * time.dt
         yearCounter.text = "Year: " + str(globalTimeInDays // 365)
     app.step()
