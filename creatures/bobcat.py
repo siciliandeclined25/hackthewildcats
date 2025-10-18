@@ -11,3 +11,9 @@ class Bobcat(Entity):
             color=color.red,
             texture_scale=(10, 10),
         )
+        self.modes = ["idle", "walk", "hunt", "death", "babyidle", "babymake"]
+        self.idleTimer = random.randint(0, 4)
+        self.mode = self.modes[0]
+
+    def update(self):
+        pass
