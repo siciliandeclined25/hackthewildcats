@@ -18,6 +18,7 @@ class Manhattan:
         self.worldChunkSize = worldChunkSize
         self.createWorld()
         self.paused = False
+        self.predators = []
         # metadata clicked handler
 
     def clearClicked(self):
@@ -53,6 +54,7 @@ class Manhattan:
 
     def updateCreatures(self):
         clickedMetadata = None
+
         # update entity positions
         for entity in self.myEntities:
             entity.mupdate()
@@ -67,7 +69,59 @@ class Manhattan:
                     # destroy(entity)
             except AttributeError:
                 pass
+            # handle running away in fear
+            for predators in self.predators:
+                # sneakily, make sure that the predator is following an entity
+                if entity.metadata["type"] == "Rabbit":  # only for rabbtis
+                    if (entity.position - predators.position).length() < 3:
+                        # too late, get eaten and die
+                        self.myEntities.remove(entity)
+                        # add blood from entity
+                        # don't add it to the list because i don't want to track it's existance
+                        death.BloodParticle(entity.position)
+                        os.system("afplay /System/Library/Sounds/Basso.aiff &")
+
+                        # and remove it
+                        destroy(entity)
+                        rabbits = [
+                            rabbit
+                            for rabbit in self.myEntities
+                            if rabbit.metadata["type"] == "Rabbit"
+                        ]
+                        try:
+                            newPrey = random.choice(rabbits).position
+                            predators.look_at(newPrey)
+                            predators.animate_position(
+                                newPrey, duration=3, curve=curve.linear
+                            )  # move over time
+                            self.nourishment = 10
+                        except IndexError:
+                            pass
+
+                        break
+                    if entity.mode != "flee":  # see what the entity mode is
+                        if (entity.position - predators.position).length() < 5:
+                            entity.mode = "flee"  # aka run for your life
+                            fleeDirection = (
+                                entity.position - predators.position
+                            ).normalized()
+                            entity.directionToWalk += fleeDirection * time.dt * 2
+
+                    elif entity.mode == "flee":  # redudant but verbose
+                        if (
+                            entity.position - predators.position
+                        ).length() > 5 and entity.metadata["type"] == "Rabbit":
+                            # no worries, now we're all dandy
+                            entity.mode = "walk"  # just idle animation
+                            entity.directionToWalk = Vec3(
+                                random.choice([-1, 1]), 0, random.choice([-1, 1])
+                            )
+                            entity.walkTimer = random.randint(0, 4)
+
             # handles death
+            # dying from starvation
+            if entity.metadata["type"] == "Bobcat" and entity.nourishment <= 0:
+                entity.killMe = True
             if entity.killMe:
                 # remove the entity from update
                 self.myEntities.remove(entity)

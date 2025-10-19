@@ -22,6 +22,7 @@ class BloodParticle(Entity):
         self.fade = uniform(0.5, 1.2)
         self.gravity = Vec3(0, -9, 0)  # stronger gravity pull
         self.killMe = False
+        self.metadata = {"type": "Death"}
 
     def update(self):
         self.velocity += self.gravity * time.dt

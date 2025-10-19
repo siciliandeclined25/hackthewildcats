@@ -11,6 +11,7 @@ class Arbore(Entity):
         )
         self.placeRandom()
         self.killMe = False
+        self.metadata = {"type": "Tree"}
 
     def placeRandom(self):
         range = 20

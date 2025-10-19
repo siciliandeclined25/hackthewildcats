@@ -19,6 +19,7 @@ class Grass(Entity):
             color=Vec4(0.31, 0.47, 0.24, 1),
         )
         self.killMe = False
+        self.metadata = {"type": "Grass"}
 
     def mupdate(self):
         pass

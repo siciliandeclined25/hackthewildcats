@@ -3,7 +3,7 @@ import names
 
 
 class Rabbit(Entity):
-    def __init__(self, position=(0, 0, 0)):
+    def __init__(self, position=(random.randint(-10, 10), 0, random.randint(-10, 10))):
         super().__init__(
             scale=0.3,
             position=position,
@@ -20,7 +20,7 @@ class Rabbit(Entity):
         self.walkTimer = random.randint(0, 4)
         self.mode = self.modes[0]
         # clicked, if clicked the entity is selected in our invetory thing
-        self.clicked = True
+        self.clicked = False
         # entity metadata for our little explorer
         self.metadata = {
             "name": names.get_first_name(),
@@ -49,6 +49,7 @@ class Rabbit(Entity):
             self.makeOffspring = True
         if not self.clicked:
             self.color = color.white
+        # superseding all movement:
         if self.mode == "idle":
             self.idleTimer -= time.dt
             if self.idleTimer <= 0:
@@ -75,6 +76,10 @@ class Rabbit(Entity):
                 self.directionToWalk = Vec3(
                     random.choice([-1, 1]), 0, random.choice([-1, 1])
                 )
+        elif self.mode == "flee":
+            self.color = color.red
+            self.x += self.directionToWalk.x * time.dt
+            self.z += self.directionToWalk.z * time.dt
 
     def clicked(self):
         self.clicked = True

@@ -66,8 +66,9 @@ def input(key):
     if key == "space":
         print("clicked!")
         envio.paused = not envio.paused
-    if key == "p":
-        envio.myEntites.append(bobcat.Bobcat())
+    if key == "p":  # adds a predator
+        envio.myEntities.append(bobcat.Bobcat())
+        envio.predators.append(bobcat.Bobcat())
     if key == "left mouse down":
         envio.clearClicked()
 
