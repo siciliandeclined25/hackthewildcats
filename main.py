@@ -8,6 +8,7 @@ from panda3d.core import WindowProperties
 from panda3d.core import loadPrcFileData
 from creatures import bobcat
 from time import sleep
+import csv
 
 # LOCAL MODULES
 import envio
@@ -58,6 +59,22 @@ ageCounter = Text(
     parent=camera.ui,
     position=(0.01, 0.014),
 )
+predCounter = Text(
+    "Predators: ",
+    color=color.white,
+    scale_x=0.05,
+    scale_y=0.07,
+    parent=camera.ui,
+    position=(0.01, 0.012),
+)
+rabCounter = Text(
+    "Prey: ",
+    color=color.white,
+    scale_x=0.05,
+    scale_y=0.07,
+    parent=camera.ui,
+    position=(0.01, 0.01),
+)
 
 app = Ursina()
 
@@ -67,14 +84,37 @@ def input(key):
         print("clicked!")
         envio.paused = not envio.paused
     if key == "p":  # adds a predator
-        envio.myEntities.append(bobcat.Bobcat())
-        envio.predators.append(bobcat.Bobcat())
+        mybob = bobcat.Bobcat()
+        envio.myEntities.append(mybob)
+        envio.predators.append(mybob)
+        rabbits = [
+            rabbit for rabbit in envio.myEntities if rabbit.metadata["type"] == "Rabbit"
+        ]
+        try:
+            newPrey = random.choice(rabbits).position
+            mybob.look_at(newPrey)
+            mybob.animate_position(
+                newPrey, duration=6, curve=curve.linear
+            )  # move over time
+            mybob.nourishment = 10
+        except IndexError:
+            pass
     if key == "left mouse down":
         envio.clearClicked()
 
 
+# CSV ingreation
+def logCSV(t, prey, predators, filename="data.csv"):
+    with open(filename, "a", newline="") as f:
+        writer = csv.writer(f)
+        if f.tell() == 0:  # write header once
+            writer.writerow(["time", "prey", "predators"])
+        writer.writerow([t, prey, predators])
+
+
 # MAIN LOOP
 previousMetadata = None
+previousGlobalTimeCSV = 0
 globalTimeInDays = 0
 while True:
     # first clear all clicked
@@ -87,4 +127,23 @@ while True:
             ageCounter.text = "Age: " + str(clickedMetadata["age"] // 365)
         globalTimeInDays += 42 * time.dt
         yearCounter.text = "Year: " + str(globalTimeInDays // 365)
+        predCounter.text = "Predators: " + str(len(envio.predators))
+        preyCText = str(
+            len(
+                [
+                    rabbit
+                    for rabbit in envio.myEntities
+                    if rabbit.metadata["type"] == "Rabbit"
+                ]
+            )
+        )
+        rabCounter.text = "Prey: " + preyCText
+        # handle csv input
+        print(globalTimeInDays // 365)
+        print("&")
+        print(previousGlobalTimeCSV)
+        print("eeee")
+        if globalTimeInDays // 365 != previousGlobalTimeCSV:
+            previousGlobalTimeCSV = globalTimeInDays // 365
+            logCSV(globalTimeInDays // 365, preyCText, len(envio.predators))
     app.step()

@@ -1,6 +1,6 @@
 # imports
 from enum import EnumType
-
+import csv
 from creatures import bobcat, rabbit, sun, arbore, grass, death, heart
 import random
 from ursina import *
@@ -61,7 +61,6 @@ class Manhattan:
             # handles birth
             try:
                 if entity.makeOffspring and len(self.myEntities) < 75:
-                    print(len(self.myEntities))
                     self.myEntities.append(rabbit.Rabbit())
                     os.system("afplay /System/Library/Sounds/Pop.aiff &")
                     print("BIRTH!")
@@ -73,7 +72,9 @@ class Manhattan:
             for predators in self.predators:
                 # sneakily, make sure that the predator is following an entity
                 if entity.metadata["type"] == "Rabbit":  # only for rabbtis
-                    if (entity.position - predators.position).length() < 3:
+                    if (
+                        entity.position - predators.position
+                    ).length() < 3 and predators.nourishment < 3:
                         # too late, get eaten and die
                         self.myEntities.remove(entity)
                         # add blood from entity
@@ -92,9 +93,10 @@ class Manhattan:
                             newPrey = random.choice(rabbits).position
                             predators.look_at(newPrey)
                             predators.animate_position(
-                                newPrey, duration=3, curve=curve.linear
+                                newPrey, duration=6, curve=curve.linear
                             )  # move over time
-                            self.nourishment = 10
+                            predators.nourishment = 7
+                            print("i was fed dont fret my brother")
                         except IndexError:
                             pass
 
@@ -121,10 +123,14 @@ class Manhattan:
             # handles death
             # dying from starvation
             if entity.metadata["type"] == "Bobcat" and entity.nourishment <= 0:
+                print("hungry!!!")
+
                 entity.killMe = True
             if entity.killMe:
                 # remove the entity from update
                 self.myEntities.remove(entity)
+                if entity.metadata["type"] == "Bobcat":
+                    self.predators.remove(entity)
                 # add blood from entity
                 # don't add it to the list because i don't want to track it's existance
                 death.BloodParticle(entity.position)

@@ -34,7 +34,7 @@ class Bobcat(Entity):
 
     def mupdate(self):
         self.metadata["age"] += 42 * time.dt
-
+        self.nourishment -= 1 * time.dt
         if self.metadata["age"] > self.lifeExpectancy:  # die when old
             self.killMe = True
         if self.metadata["age"] > self.pregnancyTimer:
