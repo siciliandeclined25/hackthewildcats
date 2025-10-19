@@ -9,9 +9,13 @@ from panda3d.core import loadPrcFileData
 from creatures import bobcat
 from time import sleep
 import csv
+import webbrowser
 
 # LOCAL MODULES
 import envio
+
+# Open AI Voice Agent in browser
+webbrowser.open('https://elevenlabs.io/app/talk-to?agent_id=agent_0101k7vyy29heqr9rvy4fmqs6psv')
 
 loadPrcFileData("", "sync-video false")  # disables v-sync pause
 loadPrcFileData("", "want-pstats false")  # optional

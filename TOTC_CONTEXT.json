@@ -1,0 +1,58 @@
+{
+  "simulation_name": "Tragedy of the Commons Context",
+  "description": "A predator-prey ecological simulation demonstrating r/K selection theory and Lotka-Volterra dynamics",
+  "version": "1.0.0",
+  "species": {
+    "prey": {
+      "name": "Rabbit",
+      "scientific_name": "Sylvilagus spp.",
+      "type": "r-selected",
+      "characteristics": [
+        "High reproduction rate",
+        "Short lifespan (3-7 years in wild)",
+        "Rapid population growth",
+        "Early maturity",
+        "Many offspring per breeding cycle"
+      ],
+      "strategy": "Opportunistic, fast-breeding species that thrives when resources are abundant and predation is low",
+      "ecological_role": "Primary consumer, prey base for predators"
+    },
+    "predator": {
+      "name": "Bobcat",
+      "scientific_name": "Lynx rufus",
+      "type": "K-selected",
+      "characteristics": [
+        "Low reproduction rate",
+        "Longer lifespan (7-10 years in wild)",
+        "Stable population near carrying capacity",
+        "Delayed maturity",
+        "Few offspring with extended parental care"
+      ],
+      "strategy": "Equilibrium species that maintains stable population near carrying capacity, dependent on stable prey base",
+      "ecological_role": "Apex predator, population control for prey species"
+    }
+  },
+  "simulation_rules": {
+    "prey_growth": "Exponential growth when predators are absent or scarce (r-selection reproduction)",
+    "predation": "Predators consume prey at a rate proportional to encounter frequency",
+    "predator_reproduction": "Predator population growth depends on prey availability",
+    "predator_decline": "Predators die off when prey becomes scarce (K-selection vulnerability)",
+    "carrying_capacity": "Environment can support limited populations based on resources",
+    "stochasticity": "Random events affect birth/death rates"
+  },
+  "ecological_concepts": {
+    "r_selection": "Species with high growth rates, early reproduction, and many offspring - typical of prey species",
+    "K_selection": "Species with low growth rates, late reproduction, and fewer offspring - typical of predators",
+    "lotka_volterra": "Mathematical model describing oscillatory predator-prey dynamics",
+    "trophic_cascade": "Top-down effects where predators regulate prey populations",
+    "population_cycles": "Periodic fluctuations in population sizes due to predator-prey interactions"
+  },
+  "apes_terminology": {
+    "carrying_capacity": "Maximum population size an environment can sustain",
+    "limiting_factors": "Resources or conditions that limit population growth",
+    "density_dependent_factors": "Factors that become more intense as population density increases (e.g., predation)",
+    "density_independent_factors": "Factors unaffected by population density (e.g., weather)",
+    "extinction_vortex": "Positive feedback loop leading population toward extinction",
+    "allee_effect": "Reduced individual fitness at low population densities"
+  }
+}
